@@ -1,10 +1,7 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import SMSTemplateViewSet
-
-router = DefaultRouter()
-router.register('templates', SMSTemplateViewSet, basename='smstemplate')
+from django.urls import path
+from .views import SMSTemplateListCreate, SMSTemplateDetail
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('templates/', SMSTemplateListCreate.as_view(), name='template-list'),
+    path('templates/<int:pk>/', SMSTemplateDetail.as_view(), name='template-detail'),
 ]
