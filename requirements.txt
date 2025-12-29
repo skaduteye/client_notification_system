@@ -10,3 +10,6 @@ redis>=5.0
 
 # HTTP requests (for SMS API)
 requests>=2.31
+
+# Environment variables
+python-dotenv>=1.0
