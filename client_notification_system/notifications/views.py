@@ -38,7 +38,11 @@ class NotificationListCreate(generics.ListCreateAPIView):
         
         # If scheduled_time is now or in the past, trigger SMS immediately
         if notification.scheduled_time <= timezone.now():
-            send_sms_notification.delay(notification.id)
+            try:
+                send_sms_notification.delay(notification.id)
+            except Exception:
+                # If Celery/Redis not available, run synchronously
+                send_sms_notification(notification.id)
 
 
 class NotificationDetail(generics.RetrieveUpdateDestroyAPIView):

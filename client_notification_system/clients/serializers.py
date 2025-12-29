@@ -5,4 +5,5 @@ from .models import Client
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = '__all__'
+        fields = ['id', 'name', 'phone', 'created_at']
+        read_only_fields = ['created_at']

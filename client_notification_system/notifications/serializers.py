@@ -5,7 +5,8 @@ from .models import SMSTemplate, Notification
 class SMSTemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SMSTemplate
-        fields = '__all__'
+        fields = ['id', 'title', 'content', 'created_at']
+        read_only_fields = ['created_at']
 
 
 class NotificationSerializer(serializers.ModelSerializer):
