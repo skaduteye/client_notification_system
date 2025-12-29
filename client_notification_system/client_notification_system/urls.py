@@ -22,4 +22,5 @@ urlpatterns = [
     path('auth/', include('users.urls')),
     path('clients/', include('clients.urls')),
     path('sms/', include('notifications.urls')),
+    path('logs/', include('logs.urls')),
 ]
