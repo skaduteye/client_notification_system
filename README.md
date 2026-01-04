@@ -75,4 +75,4 @@ When you create a notification with a past or current time, it sends the SMS rig
 
 ## Author
 
-Samuel Cyrus-Aduteye - ALX Backend Specialization
+Samuel Aduteye - ALX Backend
