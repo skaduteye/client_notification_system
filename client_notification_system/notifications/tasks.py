@@ -1,8 +1,7 @@
 """
-Celery tasks for sending SMS notifications.
+Tasks for sending SMS notifications.
 """
 
-from celery import shared_task
 from django.utils import timezone
 
 from .models import Notification
@@ -10,7 +9,6 @@ from .sms_service import send_sms
 from logs.models import SMSLog
 
 
-@shared_task
 def send_sms_notification(notification_id: int) -> dict:
     """
     Send an SMS notification asynchronously.

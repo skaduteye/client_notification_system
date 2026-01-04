@@ -5,7 +5,7 @@ from clients.models import Client
 
 class SMSTemplate(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -22,7 +22,6 @@ class Notification(models.Model):
     
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     template = models.ForeignKey(SMSTemplate, on_delete=models.CASCADE)
-    scheduled_time = models.DateTimeField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
 

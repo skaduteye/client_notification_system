@@ -13,6 +13,19 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.validated_data
+            errors = {}
+            
+            # Check if username already exists
+            if User.objects.filter(username=data['username']).exists():
+                errors['username'] = 'User already exists'
+            
+            # Check if email already exists
+            if User.objects.filter(email=data['email']).exists():
+                errors['email'] = 'Email is already in use.'
+            
+            if errors:
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+            
             User.objects.create_user(
                 username=data['username'],
                 email=data['email'],

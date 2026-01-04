@@ -1,7 +1,2 @@
-"""
-Import the Celery app so it loads with Django.
-"""
+# Django app initialization
 
-from .celery import app as celery_app
-
-__all__ = ('celery_app',)

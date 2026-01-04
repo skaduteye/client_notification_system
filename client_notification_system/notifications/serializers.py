@@ -12,5 +12,5 @@ class SMSTemplateSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ['id', 'client', 'template', 'scheduled_time', 'status', 'created_at']
+        fields = ['id', 'client', 'template', 'status', 'created_at']
         read_only_fields = ['status', 'created_at']

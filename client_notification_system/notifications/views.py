@@ -1,5 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 from django.utils import timezone
 
 from .models import SMSTemplate, Notification
@@ -14,8 +16,20 @@ class SMSTemplateListCreate(generics.ListCreateAPIView):
     def get_queryset(self):
         return SMSTemplate.objects.filter(user=self.request.user)
 
-    def perform_create(self, serializer):
+    def create(self, request, *args, **kwargs):
+        # Check if template with this title already exists
+        title = request.data.get('title')
+        if title and SMSTemplate.objects.filter(title=title).exists():
+            return Response(
+                {'title': 'Template with this title already exists'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         serializer.save(user=self.request.user)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class SMSTemplateDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -36,13 +50,8 @@ class NotificationListCreate(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         notification = serializer.save()
         
-        # If scheduled_time is now or in the past, trigger SMS immediately
-        if notification.scheduled_time <= timezone.now():
-            try:
-                send_sms_notification.delay(notification.id)
-            except Exception:
-                # If Celery/Redis not available, run synchronously
-                send_sms_notification(notification.id)
+        # Send SMS immediately
+        send_sms_notification(notification.id)
 
 
 class NotificationDetail(generics.RetrieveUpdateDestroyAPIView):
